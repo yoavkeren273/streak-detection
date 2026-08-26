@@ -4,7 +4,7 @@ Function header is:
 find_streaks(event,bandwidth,n1,n2)
 
 
-##**Function arguments**
+**Function arguments**
 
 
 **event (pd.DataFrame)** - this is the argument for the eventfile in the form of a pandas dataframe
@@ -19,7 +19,7 @@ find_streaks(event,bandwidth,n1,n2)
 **n2 (int)** - similar to n2 but for the second check that is run on two sides of the same split bands, split along the orthogonal axis.
 
 
-##**Method of conclusion**
+**Method of conclusion**
 
 
 1. The borders of the CCD are estimated - and two non parallel vector representing two borders are chosen
