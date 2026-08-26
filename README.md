@@ -5,6 +5,8 @@ find_streaks(event,bandwidth,n1,n2)
 
 
 ##**Function arguments**
+
+
 **event (pd.DataFrame)** - this is the argument for the eventfile in the form of a pandas dataframe
 
 
@@ -18,6 +20,8 @@ find_streaks(event,bandwidth,n1,n2)
 
 
 ##**Method of conclusion**
+
+
 1. The borders of the CCD are estimated - and two non parallel vector representing two borders are chosen
 2. Streaks in the data - wether caused by pileup or by readout error, show up along the columns of the pixels on the CCD - along the axis of the chipy. For that reason we choose the vector that is parallel to the chipx axis, on which we devide the data into bands parallel to the chipy axis.
 3. The projection of each point upon each side is calculated, and the points are devided into bands according to the size of their projection on the side parallel to the chipx axis
