@@ -4,7 +4,7 @@ Function header is:
 find_streaks(event,bandwidth,n1,n2)
 
 
-**Function arguments**
+**Function Arguments**
 
 
 **event (pd.DataFrame)** - this is the argument for the eventfile in the form of a pandas dataframe
