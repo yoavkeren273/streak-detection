@@ -2,11 +2,21 @@
 This function takes an event file and returns True/False in accordance to wether or not it concluded that a pileup streak is present within the data.
 Function header is:
 find_streaks(event,bandwidth,n1,n2)
+
+
 ##**Function arguments**
 **event (pd.DataFrame)** - this is the argument for the eventfile in the form of a pandas dataframe
+
+
 **bandwitdth (int)** - the desired bandwidth by which the search is conducted, see search method
+
+
 **n1 (int)** - the distance, in number of standart deviations, required to define a band that is suspected of containing a streak, counting number of photons in each band.
+
+
 **n2 (int)** - similar to n2 but for the second check that is run on two sides of the same split bands, split along the orthogonal axis.
+
+
 ##**Method of conclusion**
 1. The borders of the CCD are estimated - and two non parallel vector representing two borders are chosen
 2. Streaks in the data - wether caused by pileup or by readout error, show up along the columns of the pixels on the CCD - along the axis of the chipy. For that reason we choose the vector that is parallel to the chipx axis, on which we devide the data into bands parallel to the chipy axis.
