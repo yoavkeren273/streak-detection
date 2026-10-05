@@ -21,7 +21,7 @@ The band containing the maximum photon count is identified and assessed against 
 In order to rule out maximas caused by bright sources, the secondary check is performed oved two halves of the image along the readout direction and the same asessment is performed independantly along the two halves, according to a second threshold $\n_2$. Both halves must independently show a statistically significant peak ($> n_2 \cdot \sigma$) at the identical projection index.
 
 ### 4. Adaptive Second Iteration*
-If a narrow streak falls on the boundary between two adjacent bands, its counts may be split across bands, leading to a false negative. To mitigate this edge case, an adaptive second pass runs with an augmented bandwidth if either check fails. The second iteration triggers at most once per chip, scaling the bandwidth by `second_iter_factor` (default: `0.8`).
+If a narrow streak falls on the boundary between two adjacent bands, its counts may be split across bands, leading to a false negative. To mitigate this edge case, an adaptive second pass runs with a rescaled bandwidth if either check fails. The second iteration triggers at most once per chip, scaling the bandwidth by `second_iter_factor` (default: `0.8`).
 
 Flow chart describing the function's decision tree:
 
@@ -38,14 +38,14 @@ Flow chart describing the function's decision tree:
 3. Primary Check: Is there an anomalous count peak?
    (Peak band count > background mean + n1 * sigma)
             │
-            ├── NO  ──► [Adaptive 2nd Pass: rerun at second_iter_factor * bandwidth] ──► Final: False
+            ├── NO  ──► [Adaptive 2nd Iteration: rerun at second_iter_factor * bandwidth] ──► Final: False
             │
             └── YES ──► 4. Bilateral Check: Does the peak cross the ENTIRE chip?
                         (Bisect chip along the orthogonal axis into Side 0 & Side 1)
                         Do BOTH halves share a coincident peak > n2 * sigma?
                               │
                               ├── YES ──► Final: TRUE
-                              └── NO  ──► [Adaptive 2nd Pass: rerun at second_iter_factor * bandwidth] ──► Final: FALSE
+                              └── NO  ──► [Adaptive 2nd Iteration: rerun at second_iter_factor * bandwidth] ──► Final: FALSE
 ```
 
 ## Dependencies
@@ -75,11 +75,11 @@ second=False
 
 ### Quickstart
 
-Note that the only two positional arguments, not set to a default value are the 'event_path' argument that recieves the path for a .fits file and the 'plot_path' argument for the desired path for the output plots to be saved. Other argument for the find_streaks function are set to default value that have been tested as typical for a standart run.
+Note that the only two positional arguments, not set to a default value are the 'event_path' argument that recieves the path for a .fits file and the 'plot_path' argument for the desired path for the output plots to be saved. Other argument for the find_streaks function are set to default value that have been tested as typical for a standard run.
 
-**bandwidth** - Slice width of the image along the chipy-parallel axis in sky pixels.
+**bandwidth** - Slice width of the image along the chipx-parallel axis in sky pixels.
 
-**n1** - The threshold distance of the maximal band's photon count from the image's mean photon count per band, measured in number of standart deviations. This outlier is measured for the whole bands in the first asessment.
+**n1** - The threshold distance of the maximal band's photon count from the image's mean photon count per band, measured in number of standard deviations. This outlier is measured for the whole bands in the first asessment.
 
 **n2** - A similar outlier for the second assesment on both chip halves during the second, split band verification.
 
@@ -95,13 +95,13 @@ For a given observation, the module outputs a verdict_obsid_<OBSID>.csv table wi
 
 **is_streak (bool)** - Function's verdict regarding suspection of streak presence in the image
 
-**sigma_distance (float)** - The distance in number of standart deviations of the maximum band that is asessed againts $n_1 \cdot \sigma$.
+**sigma_distance (float)** - The distance in number of standard deviations of the maximum band that is assessed againts $n_1 \cdot \sigma$.
 
-**sigma_distance_side1/2 (float)** - The distance in number of standart deviations of the maximum half band in each side that is asessed againts $n_2 \cdot \sigma$.
+**sigma_distance_side1/2 (float)** - The distance in number of standard deviations of the maximum half band in each side that is assessed againts $n_2 \cdot \sigma$.
 
 **mean_photon_count (float)** - Mean background count across primary slices (excluding candidate peak).
 
-**mean_photon_count_side1/2 (float)** - Background mean photon count on secondary, half-bands on each side (excluding canidate peak).
+**mean_photon_count_side1/2 (float)** - Background mean photon count on secondary, half-bands on each side (excluding candidate peak).
 
 **labeled_as_streaked_in_cda (bool)** - Flag matching with cases allready flagged in cda.
 
@@ -111,13 +111,13 @@ Aditionally, two figures are saved in the plot_path repository:
 **<OBSID>_first_check_ccd_<CCD>.png** - Diagnostics from the primary check, containing three subplots from left to right:
 1. Histogram of photon counts - the background mean is marked with a vertical dashed line, and the sigma_distance value presented in red.
 2. Photon count per band - 1D slice profile across the chip, the peak band is marked with a dashed red vertical line.
-3. Spacial map of the photons on chip, in [x,y] coordinates, including the bands' borders in purple and the canidate band marked in red.
+3. spatial map of the photons on chip, in [x,y] coordinates, including the bands' borders in purple and the candidate band marked in red.
 
 example:
 
 <img width="1800" height="600" alt="3956_first_check_ccd_7" src="https://github.com/user-attachments/assets/397ec792-8c81-46c8-8476-3c809c2c3fa2" />
 
-**<OBSID>_second_check_ccd_<CCD>.png** - The same plots are presented for each half of the data seperately - side 1 on the left and side 2 on the right. The photon graph per band is on top, Hisograms below it, and a spacial map with the spilt bands' borders on the bottom.
+**<OBSID>_second_check_ccd_<CCD>.png** - The same plots are presented for each half of the data seperately - side 1 on the left and side 2 on the right. The photon graph per band is on top, Hisograms below it, and a spatial map with the spilt bands' borders on the bottom.
 
 example:
 
@@ -131,8 +131,8 @@ plot_path/
 └── obsid_<OBSID>/
     ├── verdict_obsid_<OBSID>.csv
     ├── ccd_0/
-    │   ├── <OBSID>_first_check.png
-    │   └── <OBSID>_second_check.png   (only if Check 1 passed)
+    │   ├── <OBSID>_first_check_ccd_<CCD>.png
+    │   └── <OBSID>_second_check_ccd_<CCD>.png   (only if Check 1 passed)
     ├── ccd_1/
     └── ...
 ```
