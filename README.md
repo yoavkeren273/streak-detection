@@ -50,14 +50,23 @@ This module is verified on Python 3.11 – 3.13 and relies on numpy, pandas, ast
 
 # Function Parameters
 The module's primary function is:
+
 find_streaks(
-event_path, 
+
+event_path,
+
 plot_path, 
+
 bandwidth=50, 
+
 n1=10, 
+
 n2=4, 
+
 second_iter_factor=0.8, 
+
 second=False
+
 )
 
 ***Quickstart***
