@@ -6,13 +6,17 @@ The module includes several utility functions but find_streaks is the main calle
 
 # Method of conclusion
 The find_streaks logic uses a spatial two tier test on each CCD to flag suspected streaks. The calculations are done on the event file's [x,y] coordinates after the dithering is corrected, which concentrates the streaks into a more consistant and clear line.
+
 **Orientation & Coordinate Transformation:**
 First, the borders of the CCD are estimated and two non parallel vector, representing the two axis of the borders are chosen. Streaks in the data show up along the columns of the pixels on the CCD - along the axis of the chipy and so the band slicing will be done along the border axis coinciding with the chipx axis.
 The slicing itself is done by calculating the norm of the projection of each point on the cosen axis vector (the point - as a vector with a shared origin with the axis vector). The points are then devided to bands according to the value of their projection's norm.
+
 **Primary Check**
 The band containing a maximum photon count is chosen and is asessed againts the mean photon count per band - if it exeedes $n_1 \cdot \sigma$, sigma being the standart deviation, it is flagged as a canidate and passes on to the secondary check.
+
 **Secondary Check**
 In order to rule out maximas caused by bright sources, the secondary check is performed oved two halves of the image along the readout direction and the same asessment is performed independantly along the two halves, according to a second threshold n2. Both halves must independently show a statistically significant peak ($> n_2 \cdot \sigma$) at the identical projection index.
+
 **Adaptive Second Iteration**
 Streaks may fall on the border between two bands resulting in a false negative. In order to rule that out a second iteration with an augmented bandwidth has been implemented. The second iteration triggers if one of the two former checks fails, and will only be performed once. The bandwidth will be multipled by a factor - the function's second_iter_factor argument which is defaulted to 0.8.
 
@@ -55,6 +59,7 @@ n2=4,
 second_iter_factor=0.8, 
 second=False
 )
+
 ***Quickstart***
 Note that the only two positional arguments, not set to a default value are the 'event_path' argument that recieves the path for a .fits file and the 'plot_path' argument for the desired path for the output plots to be saved. Other argument for the find_streaks function are set to default value that have been tested as typical for a standart run.
 
