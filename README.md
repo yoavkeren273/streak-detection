@@ -15,10 +15,10 @@ First, the borders of the CCD are estimated and two non parallel vector, represe
 Slicing is executed by computing the norm of the vector projection of each event onto the chosen axis vector (sharing the top-left corner as the origin). Events are then binned into discrete bands according to the scalar value of their projection norm.
 
 ### 2. Primary Check
-The band containing the maximum photon count is identified and assessed against the background expectation. If the peak exceeds the background mean by more than $n_1 \times \sigma$ (where $\sigma$ is the standard deviation across non-peak bands), it is flagged as a streak candidate and forwarded to the secondary check.
+The band containing the maximum photon count is identified and assessed against the background expectation. If the peak exceeds the background mean by more than $n_1 \cdot \sigma$ (where $\sigma$ is the standard deviation across non-peak bands), it is flagged as a streak candidate and forwarded to the secondary check.
 
 ### 3. Secondary Check
-In order to rule out maximas caused by bright sources, the secondary check is performed oved two halves of the image along the readout direction and the same asessment is performed independantly along the two halves, according to a second threshold n2. Both halves must independently show a statistically significant peak ($> n_2 \cdot \sigma$) at the identical projection index.
+In order to rule out maximas caused by bright sources, the secondary check is performed oved two halves of the image along the readout direction and the same asessment is performed independantly along the two halves, according to a second threshold $\n_2$. Both halves must independently show a statistically significant peak ($> n_2 \cdot \sigma$) at the identical projection index.
 
 ### 4. Adaptive Second Iteration*
 If a narrow streak falls on the boundary between two adjacent bands, its counts may be split across bands, leading to a false negative. To mitigate this edge case, an adaptive second pass runs with an augmented bandwidth if either check fails. The second iteration triggers at most once per chip, scaling the bandwidth by `second_iter_factor` (default: `0.8`).
