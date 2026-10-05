@@ -22,6 +22,7 @@ Streaks may fall on the border between two bands resulting in a false negative. 
 
 Flow chart describing the function's decision tree:
 
+```text
 [Raw FITS Events for CCD]
             │
             ▼
@@ -42,7 +43,7 @@ Flow chart describing the function's decision tree:
                               │
                               ├── YES ──► Final: TRUE
                               └── NO  ──► [Adaptive 2nd Pass: rerun at second_iter_factor * bandwidth] ──► Final: FALSE
-
+```
 
 # Dependencies
 This module is verified on Python 3.11 – 3.13 and relies on numpy, pandas, astropy and matplotlib as well as reference catalog file for streaked observations from the Chandra Data Archive - 'cda_flagged_list.txt' (included) to be put in the same repository as the module's .py file.
@@ -119,17 +120,18 @@ example:
 <img width="1200" height="1800" alt="3956_second_check_7" src="https://github.com/user-attachments/assets/907ab7d2-b37a-40a1-bded-d548034442d6" />
 
 
+
 The module creates a folder hierarchy under plot_path as such:
-screening_output/
+```text
+plot_path/
 └── obsid_<OBSID>/
     ├── verdict_obsid_<OBSID>.csv
-    ├── ccd 0/
-    │   ├── <OBSID> first check.png
-    │   └── <OBSID> second check.png   (only if Check 1 passed)
-    ├── ccd 1/
+    ├── ccd_0/
+    │   ├── <OBSID>_first_check.png
+    │   └── <OBSID>_second_check.png   (only if Check 1 passed)
+    ├── ccd_1/
     └── ...
-
-
+```
 
 
 
