@@ -12,7 +12,7 @@ The find_streaks logic a two tier spatial test on each CCD to flag suspected str
 
 ### 1. Orientation & Slicing:
 First, the borders of the CCD are estimated and two non parallel vector, representing the two axis of the borders are chosen. Because streaks traverse the physical readout columns along the $\text{CHIPY}$ direction, spatial band slicing is performed along the axis coinciding with the $\text{CHIPX}$ direction.
-Slicing is executed by computing the norm of the vector projection of each event onto the chosen axis vector (sharing the top-left corner as the origin). Events are then binned into discrete bands according to the scalar value of their projection norm.
+Slicing is executed by computing the norm of the vector projection of each event onto the chosen axis vector (sharing the top-left corner as the origin). Events are then divided into discrete bands according to the scalar value of their projection norm.
 
 ### 2. Primary Check
 The band containing the maximum photon count is identified and assessed against the background expectation. If the peak exceeds the background mean by more than $n_1 \cdot \sigma$ (where $\sigma$ is the standard deviation across non-peak bands), it is flagged as a streak candidate and forwarded to the secondary check.
