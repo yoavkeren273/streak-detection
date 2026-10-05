@@ -1,24 +1,27 @@
 # find_streaks
-find_streaks is a python module designed to detect readout and pileup streak contamination in Chandra X-ray Observatory ACIS observations.
+
+`find_streaks` is a Python module designed to detect readout and pileup streaks in Chandra X-ray Observatory ACIS observations.
+
 Given a Level-2 FITS event file (`acisf..._evt2.fits`), the pipeline searches every active CCD chip for streaks, matches results with archival Chandra Data Archive (CDA) records, saves diagnostic plots, and outputs a summary CSV table.
-The module includes several utility functions but find_streaks is the main caller function that initiates the entire logical sequence.
+
+The module contains several geometry and math utilities, with `find_streaks()` serving as the primary caller function that initiates the entire detection sequence.
 
 
-# Method of conclusion
-The find_streaks logic uses a spatial two tier test on each CCD to flag suspected streaks. The calculations are done on the event file's [x,y] coordinates after the dithering is corrected, which concentrates the streaks into a more consistant and clear line.
+## Method & Detection Logic
+The find_streaks logic a two tier spatial test on each CCD to flag suspected streaks. The calculations are performed on the event file's sky coordinates ('[x,y]') after dither correction has been applied, concentrating streaks into consistent, continuous lines.
 
-**Orientation & Coordinate Transformation:**
-First, the borders of the CCD are estimated and two non parallel vector, representing the two axis of the borders are chosen. Streaks in the data show up along the columns of the pixels on the CCD - along the axis of the chipy and so the band slicing will be done along the border axis coinciding with the chipx axis.
-The slicing itself is done by calculating the norm of the projection of each point on the cosen axis vector (the point - as a vector with a shared origin with the axis vector). The points are then devided to bands according to the value of their projection's norm.
+### 1. Orientation & Slicing:
+First, the borders of the CCD are estimated and two non parallel vector, representing the two axis of the borders are chosen. Because streaks traverse the physical readout columns along the $\text{CHIPY}$ direction, spatial band slicing is performed along the axis coinciding with the $\text{CHIPX}$ direction.
+Slicing is executed by computing the norm of the vector projection of each event onto the chosen axis vector (sharing the top-left corner as the origin). Events are then binned into discrete bands according to the scalar value of their projection norm.
 
-**Primary Check**
-The band containing a maximum photon count is chosen and is asessed againts the mean photon count per band - if it exeedes $n_1 \cdot \sigma$, sigma being the standart deviation, it is flagged as a canidate and passes on to the secondary check.
+### 2. Primary Check
+The band containing the maximum photon count is identified and assessed against the background expectation. If the peak exceeds the background mean by more than $n_1 \times \sigma$ (where $\sigma$ is the standard deviation across non-peak bands), it is flagged as a streak candidate and forwarded to the secondary check.
 
-**Secondary Check**
+### 3. Secondary Check
 In order to rule out maximas caused by bright sources, the secondary check is performed oved two halves of the image along the readout direction and the same asessment is performed independantly along the two halves, according to a second threshold n2. Both halves must independently show a statistically significant peak ($> n_2 \cdot \sigma$) at the identical projection index.
 
-**Adaptive Second Iteration**
-Streaks may fall on the border between two bands resulting in a false negative. In order to rule that out a second iteration with an augmented bandwidth has been implemented. The second iteration triggers if one of the two former checks fails, and will only be performed once. The bandwidth will be multipled by a factor - the function's second_iter_factor argument which is defaulted to 0.8.
+### 4. Adaptive Second Iteration*
+If a narrow streak falls on the boundary between two adjacent bands, its counts may be split across bands, leading to a false negative. To mitigate this edge case, an adaptive second pass runs with an augmented bandwidth if either check fails. The second iteration triggers at most once per chip, scaling the bandwidth by `second_iter_factor` (default: `0.8`).
 
 Flow chart describing the function's decision tree:
 
@@ -92,16 +95,17 @@ For a given observation, the module outputs a verdict_obsid_<OBSID>.csv table wi
 
 **is_streak (bool)** - Function's verdict regarding suspection of streak presence in the image
 
-**sigma_distance (flaot)** - The distance in number of standart deviations of the maximum band that is asessed againts $n_1 \cdot \sigma$.
+**sigma_distance (float)** - The distance in number of standart deviations of the maximum band that is asessed againts $n_1 \cdot \sigma$.
 
-**sigma_distance_side1/2 (flaot)** - The distance in number of standart deviations of the maximum half band in each side that is asessed againts $n_2 \cdot \sigma$.
+**sigma_distance_side1/2 (float)** - The distance in number of standart deviations of the maximum half band in each side that is asessed againts $n_2 \cdot \sigma$.
 
-**mean_photon_count (flaot)** - Mean background count across primary slices (excluding candidate peak).
+**mean_photon_count (float)** - Mean background count across primary slices (excluding candidate peak).
 
-**mean_photon_count_side1/2 (flaot)** - Background mean photon count on secondary, half-bands on each side (excluding canidate peak).
+**mean_photon_count_side1/2 (float)** - Background mean photon count on secondary, half-bands on each side (excluding canidate peak).
 
 **labeled_as_streaked_in_cda (bool)** - Flag matching with cases allready flagged in cda.
 
+**The verdict DataFrame is saved as well as directly returned by the function**
 Aditionally, two figures are saved in the plot_path repository:
 
 **<OBSID>_first_check_ccd_<CCD>.png** - Diagnostics from the primary check, containing three subplots from left to right:
