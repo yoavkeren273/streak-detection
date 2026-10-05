@@ -70,6 +70,7 @@ second=False
 )
 
 ***Quickstart***
+
 Note that the only two positional arguments, not set to a default value are the 'event_path' argument that recieves the path for a .fits file and the 'plot_path' argument for the desired path for the output plots to be saved. Other argument for the find_streaks function are set to default value that have been tested as typical for a standart run.
 
 **bandwidth** - Slice width of the image along the chipy-parallel axis in sky pixels.
