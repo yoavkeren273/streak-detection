@@ -32,7 +32,7 @@ Flow chart describing the function's decision tree:
 1. Geometric Alignment (Estimate CCD corners & match CHIPX/CHIPY readout axes)
             │
             ▼
-2. Spatial Projection (Bin photon coordinates into slices of width = bandwidth)
+2. Spatial Projection (Divide photon coordinates into slices of width = bandwidth)
             │
             ▼
 3. Primary Check: Is there an anomalous count peak?
@@ -48,11 +48,11 @@ Flow chart describing the function's decision tree:
                               └── NO  ──► [Adaptive 2nd Pass: rerun at second_iter_factor * bandwidth] ──► Final: FALSE
 ```
 
-# Dependencies
+## Dependencies
 This module is verified on Python 3.11 – 3.13 and relies on numpy, pandas, astropy and matplotlib as well as reference catalog file for streaked observations from the Chandra Data Archive - 'cda_flagged_list.txt' (included) to be put in the same repository as the module's .py file.
 
 
-# Function Parameters
+## Function Parameters
 The module's primary function is:
 
 find_streaks(
@@ -73,7 +73,7 @@ second=False
 
 )
 
-***Quickstart***
+### Quickstart
 
 Note that the only two positional arguments, not set to a default value are the 'event_path' argument that recieves the path for a .fits file and the 'plot_path' argument for the desired path for the output plots to be saved. Other argument for the find_streaks function are set to default value that have been tested as typical for a standart run.
 
@@ -88,7 +88,7 @@ Note that the only two positional arguments, not set to a default value are the 
 **second** - An internal recursion tracker, leave as False unless you wish to avoid a second iteration.
 
 
-# Output
+## Output
 For a given observation, the module outputs a verdict_obsid_<OBSID>.csv table with the following columns:
 
 **ccd (int)** - ACIS chip identifier
