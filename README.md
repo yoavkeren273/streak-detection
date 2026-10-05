@@ -49,7 +49,7 @@ Flow chart describing the function's decision tree:
 ```
 
 ## Dependencies
-This module is verified on Python 3.11 – 3.13 and relies on numpy, pandas, astropy and matplotlib as well as reference catalog file for streaked observations from the Chandra Data Archive - 'cda_flagged_list.txt' (included) to be put in the same repository as the module's .py file.
+This module is verified on Python 3.11 – 3.13 and relies on numpy, pandas, astropy and matplotlib as well as reference catalog file for streaked observations from the Chandra Data Archive - 'cda_flagged_list.txt' (included) **to be put in the same repository as the module's .py file**.
 
 
 ## Function Parameters
