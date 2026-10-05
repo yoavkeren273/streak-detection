@@ -45,7 +45,7 @@ Flow chart describing the function's decision tree:
 
 
 # Dependencies
-This module is verified on Python 3.11 – 3.13 and relies on numpy, pandas, astropy and matplotlib as well as reference catalog file for streaked observations from the Chandra Data Archive - "cda_flagged_list.txt" (included) to be put in the same repository as the module's .py file.
+This module is verified on Python 3.11 – 3.13 and relies on numpy, pandas, astropy and matplotlib as well as reference catalog file for streaked observations from the Chandra Data Archive - 'cda_flagged_list.txt' (included) to be put in the same repository as the module's .py file.
 
 
 # Function Parameters
@@ -108,7 +108,16 @@ Aditionally, two figures are saved in the plot_path repository:
 2. Photon count per band - 1D slice profile across the chip, the peak band is marked with a dashed red vertical line.
 3. Spacial map of the photons on chip, in [x,y] coordinates, including the bands' borders in purple and the canidate band marked in red.
 
-**<OBSID>_second_check_ccd_<CCD>.png** - The same plots are presented for each half of the data seperately - side 1 on the left and side 2 on the right. The photon graph per band is on top, Hisograms below it, and a spacial map with the spilt bands' borders on the bottom:
+example:
+
+<img width="1800" height="600" alt="3956_first_check_ccd_7" src="https://github.com/user-attachments/assets/397ec792-8c81-46c8-8476-3c809c2c3fa2" />
+
+**<OBSID>_second_check_ccd_<CCD>.png** - The same plots are presented for each half of the data seperately - side 1 on the left and side 2 on the right. The photon graph per band is on top, Hisograms below it, and a spacial map with the spilt bands' borders on the bottom.
+
+example:
+
+<img width="1200" height="1800" alt="3956_second_check_7" src="https://github.com/user-attachments/assets/907ab7d2-b37a-40a1-bded-d548034442d6" />
+
 
 The module creates a folder hierarchy under plot_path as such:
 screening_output/
