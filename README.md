@@ -11,7 +11,7 @@ The module contains several geometry and math utilities, with `find_streaks()` s
 The find_streaks logic a two tier spatial test on each CCD to flag suspected streaks. The calculations are performed on the event file's sky coordinates ('[x,y]') after dither correction has been applied, concentrating streaks into consistent, continuous lines.
 
 ### 1. Orientation & Slicing:
-First, the borders of the CCD are estimated and two non parallel vector, representing the two axis of the borders are chosen. Because streaks traverse the physical readout columns along the $\text{CHIPY}$ direction, spatial band slicing is performed along the axis coinciding with the $\text{CHIPX}$ direction.
+First, the borders of the CCD are estimated and two non parallel vector, representing the two axes of the borders are chosen. Because streaks traverse the physical readout columns along the $\text{CHIPY}$ direction, spatial band slicing is performed along the axis coinciding with the $\text{CHIPX}$ direction.
 Slicing is executed by computing the norm of the vector projection of each event onto the chosen axis vector (sharing the top-left corner as the origin). Events are then divided into discrete bands according to the scalar value of their projection norm.
 
 ### 2. Primary Check
@@ -79,47 +79,47 @@ Note that the only two positional arguments, not set to a default value are the 
 
 ### Parameters
 
-**bandwidth** - Slice width of the image along the chipx-parallel axis in sky pixels.
+**bandwidth** - Width of a single band along the chipx-parallel axis in sky pixels.
 
-**n1** - The threshold distance of the maximal band's photon count from the image's mean photon count per band, measured in number of standard deviations. This outlier is measured for the whole bands in the first asessment.
+**n1** - Threshold distance of the maximum band's photon count from the mean count per band, measured in standard deviations ($\sigma$) for whole bands.
 
-**n2** - A similar outlier for the second assesment on both chip halves during the second, split band verification.
+**n2** - Outlier threshold ($\sigma$) required independently on both chip halves during the second (split-band) verification.
 
-**second_iter_factor** - Multiplier applied to bandwith if a second iteration of the function is needed to rule out cases where the band's border runs exactly along the streak.
+**second_iter_factor** - Multiplier applied to bandwith if a second iteration is needed to rule out cases where the band's border runs exactly along the streak.
 
 **second** - An internal recursion tracker, leave as False unless you wish to avoid a second iteration.
 
 
 ## Output
-For a given observation, the module outputs a verdict_obsid_<OBSID>.csv table with the following columns:
+For a given observation, the module saves and returns a verdict_obsid_<OBSID>.csv table with the following columns:
 
 **ccd (int)** - ACIS chip identifier
 
-**is_streak (bool)** - Function's verdict regarding suspection of streak presence in the image
+**is_streak (bool)** - Final verdict regarding suspected streak presence in the CCD.
 
-**sigma_distance (float)** - The distance in number of standard deviations of the maximum band that is assessed againts $n_1 \cdot \sigma$.
+**sigma_distance (float)** - Outlier distance of the maximum band in standard deviations, assessed against $n_1 \cdot \sigma$.
 
-**sigma_distance_side1/2 (float)** - The distance in number of standard deviations of the maximum half band in each side that is assessed againts $n_2 \cdot \sigma$.
+**sigma_distance_side1/2 (float)** -  Outlier distance in standard deviations on each half of the chip, assessed against $n_2 \cdot \sigma$.
 
 **mean_photon_count (float)** - Mean background count across primary slices (excluding candidate peak).
 
-**mean_photon_count_side1/2 (float)** - Background mean photon count on secondary, half-bands on each side (excluding candidate peak).
+**mean_photon_count_side1/2 (float)** - Mean background count on secondary half-bands for each side (excluding the candidate peak).
 
-**labeled_as_streaked_in_cda (bool)** - Flag matching with cases allready flagged in cda.
+**labeled_as_streaked_in_cda (bool)** - Flag matching with cases allready flagged as streaked in CDA.
 
-**The verdict DataFrame is saved as well as directly returned by the function**
+**The verdict DataFrame is saved to disk as well as directly returned by the function**
 Aditionally, two figures are saved in the plot_path repository:
 
 **<OBSID>_first_check_ccd_<CCD>.png** - Diagnostics from the primary check, containing three subplots from left to right:
 1. Histogram of photon counts - the background mean is marked with a vertical dashed line, and the sigma_distance value presented in red.
-2. Photon count per band - 1D slice profile across the chip, the peak band is marked with a dashed red vertical line.
+2. Photon count per band - 1D slice profile of photon counts across the chip, the peak band is marked with a dashed red vertical line and the projection index specified in the bottom axis.
 3. spatial map of the photons on chip, in [x,y] coordinates, including the bands' borders in purple and the candidate band marked in red.
 
 example:
 
 <img width="1800" height="600" alt="3956_first_check_ccd_7" src="https://github.com/user-attachments/assets/397ec792-8c81-46c8-8476-3c809c2c3fa2" />
 
-**<OBSID>_second_check_ccd_<CCD>.png** - The same plots are presented for each half of the data seperately - side 1 on the left and side 2 on the right. The photon graph per band is on top, Hisograms below it, and a spatial map with the spilt bands' borders on the bottom.
+**<OBSID>_second_check_ccd_<CCD>.png** - Split-band check diagnostics for each half of the detector separately (Side 1 on the left, Side 2 on the right). Displays band count profiles on top, count distribution histograms in the middle, and a spatial map with split-band boundaries on the bottom.
 
 example:
 
