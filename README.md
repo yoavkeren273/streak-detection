@@ -110,7 +110,7 @@ For a given observation, the module saves and returns a verdict_obsid_<OBSID>.cs
 **The verdict DataFrame is saved to disk as well as directly returned by the function**
 Aditionally, two figures are saved in the plot_path repository:
 
-**<OBSID>_first_check_ccd_<CCD>.png** - Diagnostics from the primary check, containing three subplots from left to right:
+**`<OBSID>_first_check_ccd_<CCD>.png`** - Diagnostics from the primary check, containing three subplots from left to right:
 1. Histogram of photon counts - the background mean is marked with a vertical dashed line, and the sigma_distance value presented in red.
 2. Photon count per band - 1D slice profile of photon counts across the chip, the peak band is marked with a dashed red vertical line and the projection index specified in the bottom axis.
 3. spatial map of the photons on chip, in [x,y] coordinates, including the bands' borders in purple and the candidate band marked in red.
@@ -119,7 +119,7 @@ example:
 
 <img width="1800" height="600" alt="3956_first_check_ccd_7" src="https://github.com/user-attachments/assets/397ec792-8c81-46c8-8476-3c809c2c3fa2" />
 
-**<OBSID>_second_check_ccd_<CCD>.png** - Split-band check diagnostics for each half of the detector separately (Side 1 on the left, Side 2 on the right). Displays band count profiles on top, count distribution histograms in the middle, and a spatial map with split-band boundaries on the bottom.
+**`<OBSID>_second_check_ccd_<CCD>.png`** - Split-band check diagnostics for each half of the detector separately (Side 1 on the left, Side 2 on the right). Displays band count profiles on top, count distribution histograms in the middle, and a spatial map with split-band boundaries on the bottom.
 
 example:
 
