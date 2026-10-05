@@ -107,7 +107,8 @@ For a given observation, the module saves and returns a verdict_obsid_<OBSID>.cs
 
 **labeled_as_streaked_in_cda (bool)** - Flag matching with cases allready flagged as streaked in CDA.
 
-**The verdict DataFrame is saved to disk as well as directly returned by the function** \n
+**The verdict DataFrame is saved to disk as well as directly returned by the function**
+
 Aditionally, two figures are saved in the plot_path repository:
 
 **`<OBSID>_first_check_ccd_<CCD>.png`** - Diagnostics from the primary check, containing three subplots from left to right:
