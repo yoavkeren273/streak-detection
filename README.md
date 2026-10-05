@@ -122,15 +122,19 @@ example:
 
 
 The module creates a folder hierarchy under plot_path as such:
-```text
-plot_path/
-└── obsid_<OBSID>/
-    ├── verdict_obsid_<OBSID>.csv
-    ├── ccd_0/
-    │   ├── <OBSID>_first_check.png
-    │   └── <OBSID>_second_check.png   (only if Check 1 passed)
-    ├── ccd_1/
-    └── ...
+```mermaid
+flowchart TD
+    A[Start: Run Pipeline on OBSID] --> B[Generate verdict_obsid_<OBSID>.csv]
+    B --> C[Loop over CCDs]
+    
+    subgraph CCD_Process [Per CCD Processing]
+        C --> D[Run First Check]
+        D --> E[Save: <OBSID>_first_check.png]
+        E --> F{Check 1 Passed?}
+        F -- Yes --> G[Run Second Check]
+        G --> H[Save: <OBSID>_second_check.png]
+        F -- No --> I[Skip Check 2]
+    end
 ```
 
 
